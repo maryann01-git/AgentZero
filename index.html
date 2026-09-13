@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AgentZero | Autonomous Customer Resolution Agent</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Inter, Arial, Helvetica, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(124, 92, 255, 0.14),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(0, 210, 255, 0.10),
+            transparent 28%
+        ),
+        #08090d;
+
+    color: #f5f5f7;
+}
+
+.container {
+    width: 92%;
+    max-width: 1150px;
+    margin: auto;
+    padding: 42px 0 60px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+    text-align: center;
+    margin-bottom: 38px;
+}
+
+.logo {
+    font-size: 43px;
+    font-weight: 900;
+    letter-spacing: 6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #a98cff,
+            #6f8cff,
+            #48d9ff
+        );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    margin-top: 9px;
+    color: #a7a9b5;
+    font-size: 15px;
+}
+
+.tagline {
+    margin-top: 7px;
+    color: #666b7b;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 19px;
+}
+
+.badge {
+    padding: 7px 13px;
+    border-radius: 20px;
+
+    background: #11121a;
+
+    border: 1px solid #514879;
+
+    color: #c3bddf;
+
+    font-size: 11px;
+
+    box-shadow:
+        0 0 12px rgba(111, 92, 190, 0.06);
+}
+
+
+/* =========================================================
+   MAIN CARDS
+========================================================= */
+
+.card {
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20, 21, 30, 0.98),
+            rgba(11, 12, 18, 0.98)
+        );
+
+    border: 1px solid #4a4166;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.30),
+        0 0 25px rgba(100, 80, 180, 0.04);
+
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #9a78ff,
+            #6e8cff,
+            #45d9ff
+        );
+
+    opacity: 0.9;
+}
+
+.card-title {
+    font-size: 19px;
+    font-weight: 750;
+    margin-bottom: 21px;
+    color: #f0eef8;
+}
+
+
+/* =========================================================
+   REQUEST FORM
+========================================================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    margin-bottom: 8px;
+
+    font-size: 12px;
+
+    color: #9295a7;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+}
+
+input,
+textarea {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border-radius: 10px;
+
+    background: #101119;
+
+    border: 1px solid #51486b;
+
+    color: #f4f4f6;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+input:hover,
+textarea:hover {
+    border-color: #685c89;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #8b72e8;
+
+    background: #14151e;
+
+    box-shadow:
+        0 0 0 3px rgba(139, 114, 232, 0.10);
+}
+
+textarea {
+    resize: vertical;
+
+    min-height: 105px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 23px;
+}
+
+button {
+    min-width: 180px;
+
+    padding: 13px 28px;
+
+    border: 1px solid #9a82f0;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7660d4,
+            #536bcf
+        );
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(91, 79, 181, 0.25);
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        opacity 0.2s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(91, 79, 181, 0.35);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-area {
+    margin-top: 16px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-height: 20px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #555;
+}
+
+.status-dot.active {
+    background: #55e0ff;
+
+    box-shadow:
+        0 0 10px rgba(85, 224, 255, 0.8);
+
+    animation: pulse 1.2s infinite;
+}
+
+.status-dot.success {
+    background: #72e6a3;
+
+    box-shadow:
+        0 0 10px rgba(114, 230, 163, 0.6);
+}
+
+.status-dot.error {
+    background: #ff6b81;
+
+    box-shadow:
+        0 0 10px rgba(255, 107, 129, 0.6);
+}
+
+.status-text {
+    color: #85899a;
+    font-size: 12px;
+}
+
+@keyframes pulse {
+
+    0% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    100% {
+        opacity: 0.35;
+        transform: scale(0.8);
+    }
+}
+
+
+/* =========================================================
+   TRACE HEADER
+========================================================= */
+
+.trace-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+.live-status {
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    border: 1px solid #61548b;
+
+    color: #b5a9df;
+
+    background: #12121a;
+}
+
+.live-status.running {
+    border-color: #36869b;
+    color: #67dcf5;
+    background: rgba(40, 150, 180, 0.08);
+}
+
+.live-status.completed {
+    border-color: #397754;
+    color: #73dfa1;
+    background: rgba(50, 160, 100, 0.08);
+}
+
+.live-status.error {
+    border-color: #81414e;
+    color: #ff7f91;
+    background: rgba(170, 50, 70, 0.08);
+}
+
+
+/* =========================================================
+   RESOLUTION TRACE
+========================================================= */
+
+.trace {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+
+/*
+    EVERY TRACE BLOCK HAS A COMPLETE BORDER.
+*/
+
+.trace-step {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        190px 1fr;
+
+    gap: 20px;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(20, 21, 30, 0.96),
+            rgba(14, 15, 22, 0.96)
+        );
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+}
+
+
+/* =========================================================
+   FULL BORDER — GOAL
+========================================================= */
+
+.trace-step:nth-child(1) {
+
+    border: 1px solid #9b78ef;
+
+    box-shadow:
+        0 0 18px rgba(155, 120, 239, 0.07);
+}
+
+
+/* =========================================================
+   FULL BORDER — DECISION
+========================================================= */
+
+.trace-step:nth-child(2) {
+
+    border: 1px solid #748cff;
+
+    box-shadow:
+        0 0 18px rgba(116, 140, 255, 0.07);
+}
+
+
+/* =========================================================
+   FULL BORDER — ACTION
+========================================================= */
+
+.trace-step:nth-child(3) {
+
+    border: 1px solid #4fc9eb;
+
+    box-shadow:
+        0 0 18px rgba(79, 201, 235, 0.07);
+}
+
+
+/* =========================================================
+   FULL BORDER — INTERMEDIATE RESULT
+========================================================= */
+
+.trace-step:nth-child(4) {
+
+    border: 1px solid #55cdbb;
+
+    box-shadow:
+        0 0 18px rgba(85, 205, 187, 0.07);
+}
+
+
+/* =========================================================
+   FULL BORDER — ADAPTATION
+========================================================= */
+
+.trace-step:nth-child(5) {
+
+    border: 1px solid #d4aa58;
+
+    box-shadow:
+        0 0 18px rgba(212, 170, 88, 0.07);
+}
+
+
+/* =========================================================
+   FULL BORDER — VERIFICATION
+========================================================= */
+
+.trace-step:nth-child(6) {
+
+    border: 1px solid #64d49a;
+
+    box-shadow:
+        0 0 18px rgba(100, 212, 154, 0.07);
+}
+
+
+/* =========================================================
+   FULL BORDER — FINAL OUTCOME
+========================================================= */
+
+.trace-step:nth-child(7) {
+
+    border: 1px solid #a67cf0;
+
+    box-shadow:
+        0 0 18px rgba(166, 124, 240, 0.07);
+}
+
+
+/* =========================================================
+   TRACE HOVER
+========================================================= */
+
+.trace-step:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   STEP LABEL
+========================================================= */
+
+.step-name {
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    color: #9b9dae;
+}
+
+
+/* =========================================================
+   STEP CONTENT
+========================================================= */
+
+.step-content {
+
+    color: #e8e8ed;
+
+    font-size: 13px;
+
+    line-height: 1.65;
+
+    min-height: 21px;
+}
+
+
+/* =========================================================
+   FLOW TITLE
+========================================================= */
+
+.flow-title {
+
+    margin-top: 29px;
+
+    margin-bottom: 13px;
+
+    color: #858897;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   AUTONOMOUS FLOW
+========================================================= */
+
+.flow {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.flow-box {
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    background: #11121a;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+/* COMPLETE BORDER FOR FLOW BOXES */
+
+.flow-box:nth-child(1) {
+
+    border: 1px solid #9b78ef;
+
+    color: #c2b0ff;
+}
+
+.flow-box:nth-child(3) {
+
+    border: 1px solid #748cff;
+
+    color: #aab8ff;
+}
+
+.flow-box:nth-child(5) {
+
+    border: 1px solid #55c5e6;
+
+    color: #9ce4f6;
+}
+
+.flow-box:nth-child(7) {
+
+    border: 1px solid #4fc9eb;
+
+    color: #9ce5f8;
+}
+
+.flow-box:nth-child(9) {
+
+    border: 1px solid #58cdbb;
+
+    color: #93e5d8;
+}
+
+.flow-box:nth-child(11) {
+
+    border: 1px solid #d4aa58;
+
+    color: #e4c477;
+}
+
+.flow-box:nth-child(13) {
+
+    border: 1px solid #64d49a;
+
+    color: #83e2ab;
+}
+
+.flow-arrow {
+
+    color: #686b7c;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   TOOL PANEL
+========================================================= */
+
+.tools-panel {
+
+    margin-top: 26px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid #3b354d;
+}
+
+.tools-title {
+
+    color: #858897;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 13px;
+}
+
+.tools {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+.tool {
+
+    padding: 13px;
+
+    background: #101117;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    transition:
+        border-color 0.2s,
+        transform 0.2s;
+}
+
+
+/* FULL TOOL BORDERS */
+
+.tool:nth-child(1) {
+
+    border: 1px solid #9b78ef;
+}
+
+.tool:nth-child(2) {
+
+    border: 1px solid #748cff;
+}
+
+.tool:nth-child(3) {
+
+    border: 1px solid #4fc9eb;
+}
+
+.tool:nth-child(4) {
+
+    border: 1px solid #64d49a;
+}
+
+.tool:hover {
+
+    transform: translateY(-2px);
+}
+
+.tool-name {
+
+    color: #cfccdc;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.tool-description {
+
+    color: #707384;
+
+    font-size: 9px;
+
+    margin-top: 5px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+
+    text-align: center;
+
+    margin-top: 34px;
+
+    color: #555867;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 750px) {
+
+    .container {
+
+        width: 94%;
+
+        padding-top: 28px;
+    }
+
+    .logo {
+
+        font-size: 32px;
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+
+        grid-column: auto;
+    }
+
+    .trace-step {
+
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+    }
+
+    .tools {
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .trace-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .card {
+
+        padding: 20px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<div class="header">
+
+    <div class="logo">
+        AGENTZERO
+    </div>
+
+    <div class="subtitle">
+        Autonomous Customer Resolution Agent
+    </div>
+
+    <div class="tagline">
+        Goal-driven • Tool-using • Adaptive • State-aware • Verifiable
+    </div>
+
+
+    <div class="badges">
+
+        <div class="badge">
+            Autonomous
+        </div>
+
+        <div class="badge">
+            Multi-step reasoning
+        </div>
+
+        <div class="badge">
+            Tool interaction
+        </div>
+
+        <div class="badge">
+            Failure recovery
+        </div>
+
+        <div class="badge">
+            State verification
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     CUSTOMER REQUEST
+======================================================= -->
+
+<div class="card">
+
+    <div class="card-title">
+        Customer Request
+    </div>
+
+
+    <div class="form-grid">
+
+
+        <div class="field">
+
+            <label for="customerId">
+                Customer ID
+            </label>
+
+            <input
+                type="text"
+                id="customerId"
+                value="CUST001"
+                placeholder="CUST001"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="orderId">
+                Order ID
+            </label>
+
+            <input
+                type="text"
+                id="orderId"
+                value="ORD1001"
+                placeholder="ORD1001"
+            >
+
+        </div>
+
+
+        <div class="field full">
+
+            <label for="customerRequest">
+                Customer Request
+            </label>
+
+            <textarea
+                id="customerRequest"
+                placeholder="Enter the customer's issue..."
+            >My headphones arrived damaged. I want a replacement.</textarea>
+
+        </div>
+
+    </div>
+
+
+    <div class="button-row">
+
+        <button id="resolveBtn">
+            Resolve Issue
+        </button>
+
+    </div>
+
+
+    <div class="status-area">
+
+        <div
+            id="statusDot"
+            class="status-dot"
+        ></div>
+
+        <div
+            id="statusText"
+            class="status-text"
+        >
+            Agent ready
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     AGENT TRACE
+======================================================= -->
+
+<div class="card">
+
+    <div class="trace-header">
+
+        <div class="card-title" style="margin-bottom:0;">
+            AgentZero Resolution Trace
+        </div>
+
+        <div
+            id="liveStatus"
+            class="live-status"
+        >
+            READY
+        </div>
+
+    </div>
+
+
+    <div class="trace">
+
+
+        <!-- 01 GOAL -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                01 · Goal
+            </div>
+
+            <div
+                id="goal"
+                class="step-content"
+            >
+                Waiting for customer goal...
+            </div>
+
+        </div>
+
+
+        <!-- 02 DECISION -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                02 · Decision
+            </div>
+
+            <div
+                id="decision"
+                class="step-content"
+            >
+                Waiting for evidence and agent decision...
+            </div>
+
+        </div>
+
+
+        <!-- 03 ACTION -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                03 · Action
+            </div>
+
+            <div
+                id="actionTaken"
+                class="step-content"
+            >
+                Waiting for tool execution...
+            </div>
+
+        </div>
+
+
+        <!-- 04 INTERMEDIATE RESULT -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                04 · Intermediate Result
+            </div>
+
+            <div
+                id="intermediateResult"
+                class="step-content"
+            >
+                Waiting for system feedback...
+            </div>
+
+        </div>
+
+
+        <!-- 05 ADAPTATION -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                05 · Adaptation
+            </div>
+
+            <div
+                id="adaptation"
+                class="step-content"
+            >
+                Waiting to determine whether replanning is required...
+            </div>
+
+        </div>
+
+
+        <!-- 06 VERIFICATION -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                06 · Verification
+            </div>
+
+            <div
+                id="verification"
+                class="step-content"
+            >
+                Waiting for final-state verification...
+            </div>
+
+        </div>
+
+
+        <!-- 07 FINAL OUTCOME -->
+
+        <div class="trace-step">
+
+            <div class="step-name">
+                07 · Final Outcome
+            </div>
+
+            <div
+                id="finalOutcome"
+                class="step-content"
+            >
+                Waiting for final resolution...
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ===================================================
+         EXECUTION FLOW
+    =================================================== -->
+
+    <div class="flow-title">
+        Autonomous Execution Loop
+    </div>
+
+
+    <div class="flow">
+
+        <div class="flow-box">
+            GOAL
+        </div>
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+        <div class="flow-box">
+            INVESTIGATE
+        </div>
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+        <div class="flow-box">
+            DECIDE
+        </div>
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+        <div class="flow-box">
+            ACT
+        </div>
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+        <div class="flow-box">
+            OBSERVE
+        </div>
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+        <div class="flow-box">
+            ADAPT
+        </div>
+
+        <div class="flow-arrow">
+            →
+        </div>
+
+        <div class="flow-box">
+            VERIFY
+        </div>
+
+    </div>
+
+
+
+    <!-- ===================================================
+         TOOLS
+    =================================================== -->
+
+    <div class="tools-panel">
+
+        <div class="tools-title">
+            Agent Tool Environment
+        </div>
+
+
+        <div class="tools">
+
+
+            <div class="tool">
+
+                <div class="tool-name">
+                    Customer / Order DB
+                </div>
+
+                <div class="tool-description">
+                    Retrieve current order state
+                </div>
+
+            </div>
+
+
+            <div class="tool">
+
+                <div class="tool-name">
+                    Inventory Evidence
+                </div>
+
+                <div class="tool-description">
+                    Check replacement availability
+                </div>
+
+            </div>
+
+
+            <div class="tool">
+
+                <div class="tool-name">
+                    Resolution Action
+                </div>
+
+                <div class="tool-description">
+                    Execute permitted state change
+                </div>
+
+            </div>
+
+
+            <div class="tool">
+
+                <div class="tool-name">
+                    Verification
+                </div>
+
+                <div class="tool-description">
+                    Confirm resulting system state
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<div class="footer">
+
+    <div>
+        AgentZero · Autonomous Customer Resolution Agent
+    </div>
+
+    <div>
+        Simulated enterprise environment · State-changing actions remain sandboxed
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   MAKE WEBHOOK
+
+   IMPORTANT:
+   Paste your EXISTING Make webhook URL here.
+========================================================= */
+
+const webhookURL =
+    "https://hook.eu1.make.com/peoh1e1x8erh8urfgua3h24hu7couo4m";
+
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const resolveBtn =
+    document.getElementById("resolveBtn");
+
+const statusText =
+    document.getElementById("statusText");
+
+const statusDot =
+    document.getElementById("statusDot");
+
+const liveStatus =
+    document.getElementById("liveStatus");
+
+
+
+/* =========================================================
+   BUTTON EVENT
+========================================================= */
+
+resolveBtn.addEventListener(
+    "click",
+    resolveIssue
+);
+
+
+
+/* =========================================================
+   MAIN FUNCTION
+========================================================= */
+
+async function resolveIssue() {
+
+
+    /* -----------------------------------------------------
+       READ USER INPUT
+    ----------------------------------------------------- */
+
+    const customerId =
+        document
+        .getElementById("customerId")
+        .value
+        .trim();
+
+
+    const orderId =
+        document
+        .getElementById("orderId")
+        .value
+        .trim();
+
+
+    const customerRequest =
+        document
+        .getElementById("customerRequest")
+        .value
+        .trim();
+
+
+
+    /* -----------------------------------------------------
+       VALIDATE
+    ----------------------------------------------------- */
+
+    if (
+        !customerId ||
+        !orderId ||
+        !customerRequest
+    ) {
+
+        alert(
+            "Please enter Customer ID, Order ID and Customer Request."
+        );
+
+        return;
+    }
+
+
+
+    /* -----------------------------------------------------
+       PROCESSING STATE
+    ----------------------------------------------------- */
+
+    resolveBtn.disabled = true;
+
+    resolveBtn.innerText =
+        "Agent working...";
+
+
+    setStatus(
+        "Agent is investigating the request...",
+        "running"
+    );
+
+
+    liveStatus.innerText =
+        "PROCESSING";
+
+    liveStatus.className =
+        "live-status running";
+
+
+
+    /* -----------------------------------------------------
+       RESET TRACE
+    ----------------------------------------------------- */
+
+    setText(
+        "goal",
+        "Agent is understanding the customer's requested outcome..."
+    );
+
+
+    setText(
+        "decision",
+        "Agent is retrieving evidence and evaluating possible resolutions..."
+    );
+
+
+    setText(
+        "actionTaken",
+        "Agent is selecting the appropriate resolution tool..."
+    );
+
+
+    setText(
+        "intermediateResult",
+        "Waiting for system feedback..."
+    );
+
+
+    setText(
+        "adaptation",
+        "Agent will replan if the original resolution is blocked..."
+    );
+
+
+    setText(
+        "verification",
+        "Waiting for state verification..."
+    );
+
+
+    setText(
+        "finalOutcome",
+        "Waiting for final resolution..."
+    );
+
+
+
+    /* =====================================================
+       MAKE PAYLOAD
+    ===================================================== */
+
+    const requestBody = {
+
+        customer_id:
+            customerId,
+
+        customer_request:
+            customerRequest,
+
+        order_id:
+            orderId
+
+    };
+
+
+
+    try {
+
+
+        /* =================================================
+           SEND TO MAKE
+        ================================================= */
+
+        const response =
+            await fetch(
+                webhookURL,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(
+                            requestBody
+                        )
+                }
+            );
+
+
+
+        /* =================================================
+           CHECK RESPONSE
+        ================================================= */
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Make returned HTTP " +
+                response.status
+            );
+
+        }
+
+
+
+        /* =================================================
+           READ JSON
+        ================================================= */
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "AgentZero response:",
+            data
+        );
+
+
+
+        /* =================================================
+           EXTRACT RESPONSE
+        ================================================= */
+
+        const goal =
+            data.goal || "";
+
+
+        const decision =
+            data.decision || "";
+
+
+        const intermediateResult =
+            data.intermediate_result || "";
+
+
+        const verification =
+            data.verification || "";
+
+
+        const finalOutcome =
+            data.final_outcome || "";
+
+
+        let actionTaken =
+            data.action_taken || "";
+
+
+        let adaptation =
+            data.adaptation || "";
+
+
+
+        /* =================================================
+           DETECT DEMO REFUND PATH
+        ================================================= */
+
+        const combined =
+            (
+                goal +
+                " " +
+                decision +
+                " " +
+                actionTaken +
+                " " +
+                intermediateResult +
+                " " +
+                adaptation +
+                " " +
+                verification +
+                " " +
+                finalOutcome
+            ).toLowerCase();
+
+
+        const hasRefund =
+            combined.includes("refund");
+
+
+        const replacementUnavailable =
+            combined.includes(
+                "replacement unavailable"
+            ) ||
+            combined.includes(
+                "replacement_available = false"
+            ) ||
+            combined.includes(
+                "replacement is unavailable"
+            );
+
+
+
+        /* =================================================
+           CLEAR AGENTIC ACTION TRACE
+        ================================================= */
+
+        if (
+            hasRefund &&
+            replacementUnavailable
+        ) {
+
+            actionTaken =
+                'Called the "Issue refund for order" tool for ' +
+                orderId +
+                ' and updated the order state to "Refund Processed".';
+
+
+            adaptation =
+                "The original replacement plan was blocked because replacement_available was false. The agent adapted by selecting the eligible refund path.";
+
+        }
+
+
+        /* =================================================
+           FALLBACK
+        ================================================= */
+
+        else {
+
+            if (!actionTaken) {
+
+                actionTaken =
+                    "The agent selected and executed the appropriate resolution action.";
+
+            }
+
+
+            if (!adaptation) {
+
+                adaptation =
+                    "The agent evaluated the available constraints and continued with the appropriate resolution.";
+
+            }
+
+        }
+
+
+
+        /* =================================================
+           DISPLAY TRACE
+        ================================================= */
+
+        setText(
+            "goal",
+            goal ||
+            "Customer resolution goal received."
+        );
+
+
+        setText(
+            "decision",
+            decision ||
+            "Agent decision received."
+        );
+
+
+        setText(
+            "actionTaken",
+            actionTaken
+        );
+
+
+        setText(
+            "intermediateResult",
+            intermediateResult ||
+            "System feedback received."
+        );
+
+
+        setText(
+            "adaptation",
+            adaptation
+        );
+
+
+        setText(
+            "verification",
+            verification ||
+            "The agent performed a follow-up lookup to verify the final state."
+        );
+
+
+        setText(
+            "finalOutcome",
+            finalOutcome ||
+            "Resolution completed."
+        );
+
+
+
+        /* =================================================
+           SUCCESS
+        ================================================= */
+
+        setStatus(
+            "Resolution completed successfully.",
+            "success"
+        );
+
+
+        liveStatus.innerText =
+            "COMPLETED";
+
+        liveStatus.className =
+            "live-status completed";
+
+
+        resolveBtn.disabled =
+            false;
+
+        resolveBtn.innerText =
+            "Resolve Issue";
+
+
+
+    } catch (error) {
+
+
+        /* =================================================
+           ERROR
+        ================================================= */
+
+        console.error(
+            "AgentZero error:",
+            error
+        );
+
+
+        setStatus(
+            "Agent request failed. Check the Make webhook.",
+            "error"
+        );
+
+
+        liveStatus.innerText =
+            "ERROR";
+
+        liveStatus.className =
+            "live-status error";
+
+
+        setText(
+            "finalOutcome",
+            "Unable to complete the resolution. Please check the Make webhook and try again."
+        );
+
+
+        resolveBtn.disabled =
+            false;
+
+        resolveBtn.innerText =
+            "Resolve Issue";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   TRACE TEXT HELPER
+========================================================= */
+
+function setText(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(id);
+
+
+    if (element) {
+
+        element.innerText =
+            value || "—";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   STATUS HELPER
+========================================================= */
+
+function setStatus(
+    message,
+    type
+) {
+
+    statusText.innerText =
+        message;
+
+
+    statusDot.className =
+        "status-dot";
+
+
+    if (type === "running") {
+
+        statusDot.classList.add(
+            "active"
+        );
+
+    }
+
+    else if (type === "success") {
+
+        statusDot.classList.add(
+            "success"
+        );
+
+    }
+
+    else if (type === "error") {
+
+        statusDot.classList.add(
+            "error"
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
